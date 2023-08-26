@@ -3,8 +3,8 @@
   "jest": {
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "gameBoard\\.js",
-      "gameBoard\\.test\\.js"
+      "shipFactory\\.js",
+      "shipFactory\\.test\\.js"
     ]
   },
   "version": "1.0.0",
