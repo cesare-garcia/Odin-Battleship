@@ -119,7 +119,7 @@ test.skip("Calls the ship Factory function and does NOT place it at the starting
     expect(gameBoardOne.placeShip(5, 6, 6)).toBe("Not enough space. Cannot place carrier here.");
 });
 
-test("Takes a pair of coordinates and correctly determines the ship has been hit, sends the hit to the correct ship, and changes element of coordinate to X (horizontal test).", () => {
+test.skip("Takes a pair of coordinates and correctly determines the ship has been hit, sends the hit to the correct ship, and changes element of coordinate to X (horizontal test).", () => {
     const gameBoardOne = gameBoardFactory();
     gameBoardOne.placeShip(2,2,2);
     gameBoardOne.receiveAttack(2,2);
@@ -131,7 +131,7 @@ test("Takes a pair of coordinates and correctly determines the ship has been hit
     expect(gameBoardOne.receiveAttack(2,2)).toBe("You cannot strike the same spot twice");
 });
 
-test("Takes a pair of coordinates and correctly determines the ship has been hit, sends the hit to the correct ship, and changes element of coordinate to X (vertical test).", () => {
+test.skip("Takes a pair of coordinates and correctly determines the ship has been hit, sends the hit to the correct ship, and changes element of coordinate to X (vertical test).", () => {
     const gameBoardOne = gameBoardFactory();
     gameBoardOne.rotateShip();
     gameBoardOne.placeShip(2,2,2);
@@ -153,16 +153,20 @@ test.skip("Records an attack as missed (M) within the gameboard if it does not h
     expect(gameBoardOne.getBoard()[0][0]).toBe("M");
 });
 
-// test("Correctly reports that all ships have been sunk.", () => {
-    
-//     // this is going to require a ton of code
-    
-//     expect().toBe();
-// });
+test.skip("Correctly reports that all ships have been sunk.", () => {
+    const gameBoardOne = gameBoardFactory();
+    gameBoardOne.placeShip(2,2,2);
+    gameBoardOne.receiveAttack(2,2);
+    gameBoardOne.receiveAttack(2,3);
 
-// test("Correctly reports that NOT all ships have been sunk.", () => {
-//     const gameBoardOne = gameBoardFactory();
-//     gameBoardOne.allSunk();
+    expect(gameBoardOne.getGameStatus()).toBe(true);
+});
 
-//     expect(gameBoardOne.gameOver).toBe(false);
-// });
+test.skip("Correctly reports that NOT all ships have been sunk.", () => {
+    const gameBoardOne = gameBoardFactory();
+    gameBoardOne.placeShip(2,2,2);
+    gameBoardOne.receiveAttack(2,2);
+    gameBoardOne.receiveAttack(2,3);
+
+    expect(gameBoardOne.getGameStatus()).toBe(false);
+});

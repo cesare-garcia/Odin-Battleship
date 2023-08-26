@@ -2,6 +2,7 @@ const gameBoardFactory = () => {
     
     let placedShips = [];
     let sunkenCount = 0;
+    const maxSunken = 5;
     let gameOver = false;
     let board = [];
     for (let i = 0; i < 10; i++) {
@@ -194,10 +195,13 @@ const gameBoardFactory = () => {
         if (board[yCoord][xCoord] !== "" && board[yCoord][xCoord] !== "M" && board[yCoord][xCoord] !== "X") {
             board[yCoord][xCoord].hit();
             board[yCoord][xCoord].isSunk();
-            if (board[yCoord][xCoord].sunkStatus) {
-                sunkenCount++;
-            }
+            if (board[yCoord][xCoord].sunkStatus) sunkenCount++;
             board[yCoord][xCoord] = "X";
+
+            if (allSunk()) {
+                gameOver = true;
+                return gameOver;
+            }
 
         } else if (board[yCoord][xCoord] === "M" || board[yCoord][xCoord] === "X") {
             return "You cannot strike the same spot twice";
@@ -208,6 +212,14 @@ const gameBoardFactory = () => {
         }   
     };
 
+    const allSunk = () => {
+        if (maxSunken === getSunkenCount()) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     return {
         getBoard,
         getGameStatus,
@@ -215,7 +227,7 @@ const gameBoardFactory = () => {
         rotateShip,
         getShipOrientation, 
         placeShip,
-        receiveAttack,
+        receiveAttack
     };
 };
 module.exports = gameBoardFactory;
