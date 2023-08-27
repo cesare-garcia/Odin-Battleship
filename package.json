@@ -4,7 +4,9 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "shipFactory\\.js",
-      "shipFactory\\.test\\.js"
+      "shipFactory\\.test\\.js",
+      "gameBoard\\.js",
+      "gameBoard\\.test\\.js"
     ]
   },
   "version": "1.0.0",
