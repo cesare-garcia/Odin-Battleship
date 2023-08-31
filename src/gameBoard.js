@@ -41,12 +41,13 @@ const gameBoardFactory = () => {
         return shipOrientation;
     };
 
-    const shipFactory = (shipLength) => {
+    const shipFactory = (shipLength, cruiserStatus) => {
    
         return {
             shipLength,
             hits: 0,
             sunkStatus: false,
+            cruiserStatus,
             hit: function() {
                 this.hits++;
             },
@@ -56,169 +57,192 @@ const gameBoardFactory = () => {
         };
     };
     
-    const placeShip = (shipLength, yCoord, xCoord) => {
+    const placeShip = (shipLength, yCoord, xCoord, cruiserStat) => {
         if (shipLength === 5) {
-            let carrier = shipFactory(shipLength);
-            placedShips.push(carrier);
+            let carrier = shipFactory(shipLength, null);
             if (getShipOrientation()) {
-                console.log(getShipOrientation());
-                // if the remaining spaces in the array allow for a five lengther
                 if (board[yCoord].length - xCoord >= shipLength){
                     for (let i = xCoord; i < xCoord + shipLength; i++) {
                         board[yCoord][i] = carrier;
                     }
+                    if (!placedShips.includes("carrier")) placedShips.push("carrier");
+
                 } else {
                     return "Not enough space. Cannot place carrier here.";
+
                 }
 
             } else {
-                // if the remaining spaces in the array allow for a five lengther
                 if (board.length - yCoord >= shipLength) {
                     for (let i = yCoord; i < yCoord + shipLength; i++) {
                         board[i][xCoord] = carrier;
                     }
+                    if (!placedShips.includes("carrier")) placedShips.push("carrier");
+
                 } else {
                     return "Not enough space. Cannot place carrier here.";
+
                 }
+
             }
 
         } else if (shipLength === 4) {
-            let battleship = shipFactory(length);
-            placedShips.push(battleship);
+            let battleship = shipFactory(shipLength, null);
             if (getShipOrientation()) {
-                // if the remaining spaces in the array allow for a five lengther
                 if (board[yCoord].length - xCoord >= shipLength){
                     for (let i = xCoord; i < xCoord + shipLength; i++) {
                         board[yCoord][i] = battleship;
                     }
+                    if (!placedShips.includes("battleship")) placedShips.push("battleship");
+
                 } else {
                     return "Not enough space. Cannot place battleship here.";
+
                 }
 
             } else {
-                // if the remaining spaces in the array allow for a five lengther
                 if (board.length - yCoord >= shipLength) {
                     for (let i = yCoord; i < yCoord + shipLength; i++) {
                         board[i][xCoord] = battleship;
                     }
+                    if (!placedShips.includes("battleship")) placedShips.push("battleship");
+
                 } else {
                     return "Not enough space. Cannot place battleship here.";
+
                 }
+
             }
          
         } else if (shipLength === 3) {
-            let cruiserPresence = false;
-            for (let i = 0; i < placedShips.length; i++) {
-                if (placedShips[i] === "cruiser") {
-                    cruiserPresence = true;
-                }
-            }
-
-            if (!cruiserPresence) {
-                let cruiser = shipFactory(length);
-                placedShips.push(cruiser);
+            if (cruiserStat) {
+                let cruiser = shipFactory(shipLength, true);
                 if (getShipOrientation()) {
-                    // if the remaining spaces in the array allow for a five lengther
                     if (board[yCoord].length - xCoord >= shipLength){
                         for (let i = xCoord; i < xCoord + shipLength; i++) {
                             board[yCoord][i] = cruiser;
                         }
+                        if (!placedShips.includes("cruiser")) placedShips.push("cruiser");
+
                     } else {
                         return "Not enough space. Cannot place cruiser here.";
+
                     }
     
                 } else {
-                    // if the remaining spaces in the array allow for a five lengther
                     if (board.length - yCoord >= shipLength) {
                         for (let i = yCoord; i < yCoord + shipLength; i++) {
                             board[i][xCoord] = cruiser;
                         }
+                        if (!placedShips.includes("cruiser")) placedShips.push("cruiser");
+
                     } else {
                         return "Not enough space. Cannot place cruiser here.";
+
                     }
+
                 }
     
             } else {
-                let submarine = shipFactory(length);
-                placedShips.push(submarine);
+                let submarine = shipFactory(shipLength, false);
                 if (getShipOrientation()) {
-                    // if the remaining spaces in the array allow for a five lengther
                     if (board[yCoord].length - xCoord >= shipLength){
                         for (let i = xCoord; i < xCoord + shipLength; i++) {
                             board[yCoord][i] = submarine;
                         }
+                        if (!placedShips.includes("submarine")) placedShips.push("submarine");
+
                     } else {
                         return "Not enough space. Cannot place submarine here.";
+
                     }
     
                 } else {
-                    // if the remaining spaces in the array allow for a five lengther
                     if (board.length - yCoord >= shipLength) {
                         for (let i = yCoord; i < yCoord + shipLength; i++) {
                             board[i][xCoord] = submarine;
                         }
+                        if (!placedShips.includes("submarine")) placedShips.push("submarine");
+
                     } else {
                         return "Not enough space. Cannot place submarine here.";
+
                     }
+
                 }
 
             }
 
         } else {
-            let destroyer = shipFactory(2);
-            placedShips.push(destroyer);
+            let destroyer = shipFactory(shipLength, null);
             if (getShipOrientation()) {
-                // if the remaining spaces in the array allow for a five lengther
                 if (board[yCoord].length - xCoord >= shipLength){
                     for (let i = xCoord; i < xCoord + shipLength; i++) {
                         board[yCoord][i] = destroyer;
                     }
+                    if (!placedShips.includes("destroyer")) placedShips.push("destroyer");
+
                 } else {
                     return "Not enough space. Cannot place destroyer here.";
+
                 }
 
             } else {
-                // if the remaining spaces in the array allow for a five lengther
                 if (board.length - yCoord >= shipLength) {
                     for (let i = yCoord; i < yCoord + shipLength; i++) {
                         board[i][xCoord] = destroyer;
                     }
+                    if (!placedShips.includes("destroyer")) placedShips.push("destroyer");
+
                 } else {
                     return "Not enough space. Cannot place destroyer here.";
+
                 }
+
             }
+
         }
+
     };
 
     const receiveAttack = (yCoord, xCoord) => {
-
         if (board[yCoord][xCoord] !== "" && board[yCoord][xCoord] !== "M" && board[yCoord][xCoord] !== "X") {
             board[yCoord][xCoord].hit();
             board[yCoord][xCoord].isSunk();
             if (board[yCoord][xCoord].sunkStatus) sunkenCount++;
             board[yCoord][xCoord] = "X";
-
             if (allSunk()) {
                 gameOver = true;
                 return gameOver;
             }
+            return "X";
 
         } else if (board[yCoord][xCoord] === "M" || board[yCoord][xCoord] === "X") {
             return "You cannot strike the same spot twice";
 
         } else {
             board[yCoord][xCoord] = "M";
+            return "M"
 
         }   
+
     };
 
     const allSunk = () => {
         if (maxSunken === getSunkenCount()) {
             return true;
+
         } else {
             return false;
+            
         }
+
     };
+
+    const getShips = () => {
+        return placedShips;
+        
+    }
 
     return {
         getBoard,
@@ -227,14 +251,10 @@ const gameBoardFactory = () => {
         rotateShip,
         getShipOrientation, 
         placeShip,
-        receiveAttack
+        receiveAttack,
+        getShips
     };
 };
-module.exports = gameBoardFactory;
+// module.exports = gameBoardFactory;
 
-// note to self -> i don't think shipFactory will be returned, rather it will assist another method
-
-// let gameBoardOne = gameBoardFactory();
-// gameBoardOne.rotateShip();
-// gameBoardOne.placeShip(5,3,3);
-// console.log(gameBoardOne.board);
+export default gameBoardFactory;
