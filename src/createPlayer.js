@@ -28,4 +28,6 @@ const createAI = () => {
         launchAttack
     };
 };
-module.exports = createAI;
+// module.exports = createAI;
+
+export default createPlayer;
