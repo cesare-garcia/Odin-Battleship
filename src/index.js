@@ -42,6 +42,16 @@ pveButton.addEventListener("click", (e) => {
 pvpSubmitButton.addEventListener("click", (e) => {
     if (pvp1Input.checkValidity() && pvp2Input.checkValidity()) {
         e.preventDefault();
+        const name1 = pvp1Input.value;
+        const name2 = pvp2Input.value;
+        let p1Name = document.querySelector(".p1name");
+        p1Name.innerText = name1;
+        let p2Name = document.querySelector(".p2name")
+        p2Name.innerText = name2;
+        let newP1score = document.querySelector(".pscoreboard1");
+        let newP2score = document.querySelector(".pscoreboard2");
+        newP1score.innerText = `${name1} has 5 ships left.`;
+        newP2score.innerText = `${name2} has 5 ships left.`;
         let pvpBoard1 = gameBoardFactory();
         let pvpBoard2 = gameBoardFactory();
         gameInformationDiv.classList.add("hide");
@@ -354,7 +364,7 @@ pvpSubmitButton.addEventListener("click", (e) => {
 
         prepSubmit1.addEventListener("click", (e) => {
             prepDivP1.style = "display: none;";
-            prepDivP2.style = "display: block";
+            prepDivP2.style = "display: flex";
 
             rotate2.addEventListener("click", (e) => {
                 pvpBoard2.rotateShip();
@@ -592,25 +602,31 @@ pvpSubmitButton.addEventListener("click", (e) => {
             let tileId = e.target.getAttribute("id");
             let idArray = tileId.split("");
             let attack = pvpBoard1.receiveAttack(Number(idArray[5]), Number(idArray[4]));
-            if (attack === true) {
-                gsMessage.innerText = "Game Over! Player 2 Wins!";
-                pScoreBoard1.innerText = `Player 1 has ${5 - Number(pvpBoard1.getSunkenCount())} ships left.`;
+            if (attack === "You cannot strike the same spot twice") {
+                gsMessage.innerText = `Message: Try again. ${attack}.`;
+
+            } else if (attack.gameOver === true) {
+                gsMessage.innerText = `Message: Game Over! ${name2} Wins!`;
+                pScoreBoard1.innerText = `${name1} has ${5 - Number(pvpBoard1.getSunkenCount())} ships left.`;
                 e.target.style.backgroundColor = "red";
 
-            } else if (attack === "X") {
-                gsMessage.innerText = "Hit! Player 2 may fire again.";
-                pScoreBoard1.innerText = `Player 1 has ${5 - Number(pvpBoard1.getSunkenCount())} ships left.`;
-                e.target.style.backgroundColor = "red";
-                console.log(pvpBoard1.getBoard());
-
-            } else if (attack === "M") {
-                gsMessage.innerText = "Player 2 missed. Switching turns.";
-                pScoreBoard1.innerText = `Player 1 has ${5 - Number(pvpBoard1.getSunkenCount())} ships left.`;
+            } else if (attack.status === "M") {
+                gsMessage.innerText = `Message: ${name2} missed. Switching turns.`;
+                pScoreBoard1.innerText = `${name1} has ${5 - Number(pvpBoard1.getSunkenCount())} ships left.`;
                 e.target.style.backgroundColor = "cyan";
-                console.log(pvpBoard1.getBoard());
 
             } else {
-                gsMessage.innerText = "Try again. You may not fire on the same spot twice."
+                if (attack.sunk === true) {
+                    gsMessage.innerText = `Message: Ship sunk! ${name2} may fire again.`;
+                    pScoreBoard1.innerText = `${name1} has ${5 - Number(pvpBoard1.getSunkenCount())} ships left.`;
+                    e.target.style.backgroundColor = "red";
+
+                } else {
+                    gsMessage.innerText = `Message: Hit! ${name2} may fire again.`;
+                    pScoreBoard1.innerText = `${name1} has ${5 - Number(pvpBoard1.getSunkenCount())} ships left.`;
+                    e.target.style.backgroundColor = "red";
+
+                }
 
             }
 
@@ -620,27 +636,34 @@ pvpSubmitButton.addEventListener("click", (e) => {
             let tileId = e.target.getAttribute("id");
             let idArray = tileId.split("");
             let attack = pvpBoard2.receiveAttack(Number(idArray[5]), Number(idArray[4]));
-            if (attack === true) {
-                gsMessage.innerText = "Game Over! Player 1 Wins!";
-                pScoreBoard2.innerText = `Player 2 has ${5 - Number(pvpBoard2.getSunkenCount())} ships left.`;
+            if (attack === "You cannot strike the same spot twice") {
+                gsMessage.innerText = `Message: Try again. ${attack}.`;
+
+            } else if (attack.gameOver === true) {
+                gsMessage.innerText = `Message: Game Over! ${name1} Wins!`;
+                pScoreBoard2.innerText = `${name2} has ${5 - Number(pvpBoard2.getSunkenCount())} ships left.`;
                 e.target.style.backgroundColor = "red";
 
-            } else if (attack === "X") {
-                gsMessage.innerText = "Hit! Player 1 may fire again.";
-                pScoreBoard2.innerText = `Player 2 has ${5 - Number(pvpBoard2.getSunkenCount())} ships left.`;
-                e.target.style.backgroundColor = "red";
-                console.log(pvpBoard2.getBoard());
-
-            } else if (attack === "M") {
-                gsMessage.innerText = "Player 1 missed. Switching turns.";
-                pScoreBoard2.innerText = `Player 2 has ${5 - Number(pvpBoard2.getSunkenCount())} ships left.`;
+            } else if (attack.status === "M") {
+                gsMessage.innerText = `Message: ${name1} missed. Switching turns.`;
+                pScoreBoard2.innerText = `${name2} has ${5 - Number(pvpBoard2.getSunkenCount())} ships left.`;
                 e.target.style.backgroundColor = "cyan";
-                console.log(pvpBoard2.getBoard());
 
             } else {
-                gsMessage.innerText = "Try again. You may not fire on the same spot twice."
+                if (attack.sunk === true) {
+                    gsMessage.innerText = `Message: Ship sunk! ${name1} may fire again.`;
+                    pScoreBoard2.innerText = `${name2} has ${5 - Number(pvpBoard2.getSunkenCount())} ships left.`;
+                    e.target.style.backgroundColor = "red";
+
+                } else {
+                    gsMessage.innerText = `Message: Hit! ${name1} may fire again.`;
+                    pScoreBoard2.innerText = `${name2} has ${5 - Number(pvpBoard2.getSunkenCount())} ships left.`;
+                    e.target.style.backgroundColor = "red";
+
+                }
 
             }
+            
         }));
 
     } 
