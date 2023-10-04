@@ -3,6 +3,7 @@ const prepDivFactory = (name, order) => {
     prepDiv.classList.add("prepDiv");
     prepDiv.setAttribute("data-prepDiv", `${order}`);
     const prepH1 = document.createElement("h1");
+    prepH1.classList.add("prepH1");
     prepH1.innerText = `${name}, please place your ships on the grid.`;
     const prepMessages = document.createElement("p");
     prepMessages.classList.add("p_mess");
@@ -39,9 +40,7 @@ const prepDivFactory = (name, order) => {
     rowCreator(prepGrid, order, 8);
     rowCreator(prepGrid, order, 9);
 
-    const shipsH2 = document.createElement("h2");
-    shipsH2.classList.add("shipsH2");
-    shipsH2.innerText = "Ships";
+    
     const oriH3 = document.createElement("h3");
     oriH3.classList.add(`oriH3_${order}`);
     oriH3.innerText = "Orientation: Horizontal";
@@ -51,6 +50,9 @@ const prepDivFactory = (name, order) => {
     rotateButton.innerText = "Rotate";
     const shipsDiv = document.createElement("div");
     shipsDiv.classList.add("shipsDiv");
+    const shipsH2 = document.createElement("h2");
+    shipsH2.classList.add("shipsH2");
+    shipsH2.innerText = "Ships";
     const carrierDiv = document.createElement("div");
     carrierDiv.innerText = "Carrier";
     carrierDiv.classList.add("shipSelector");
@@ -72,6 +74,7 @@ const prepDivFactory = (name, order) => {
     destroyerDiv.classList.add("shipSelector");
     destroyerDiv.classList.add(`destroyer_${order}`);
 
+    shipsDiv.appendChild(shipsH2);
     shipsDiv.appendChild(carrierDiv);
     shipsDiv.appendChild(battleshipDiv);
     shipsDiv.appendChild(cruiserDiv);
@@ -90,7 +93,6 @@ const prepDivFactory = (name, order) => {
     placementDiv.appendChild(placementLeft);
     placementLeft.appendChild(prepGrid);
     placementDiv.appendChild(placementRight);
-    placementRight.appendChild(shipsH2);
     placementRight.appendChild(oriH3);
     placementRight.appendChild(rotateButton);
     placementRight.appendChild(shipsDiv);
