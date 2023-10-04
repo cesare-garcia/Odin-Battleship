@@ -2,7 +2,7 @@ const loadUI = (body) => {
     
     const header = document.createElement("header");
     const headerTitle = document.createElement("h1");
-    headerTitle.innerText = "Battleship"
+    headerTitle.innerText = "BATTLESHIP"
     header.appendChild(headerTitle);
     const main = document.createElement("main");
     const footer = document.createElement("footer");
@@ -119,9 +119,11 @@ const loadUI = (body) => {
     boardContainer.appendChild(gsRight);
     const gsLeftH2 = document.createElement("h2");
     gsLeftH2.classList.add("gsh2");
+    gsLeftH2.classList.add("p1name");
     gsLeftH2.innerText = "Player 1: ";
     const gsRightH2 = document.createElement("h2");
     gsRightH2.classList.add("gsh2")
+    gsRightH2.classList.add("p2name");
     gsRightH2.innerText = "Player 2: ";
     const p1Board = document.createElement("div");
     p1Board.setAttribute("id", "p1Board");
