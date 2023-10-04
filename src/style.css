@@ -1,5 +1,20 @@
+@font-face {
+    font-family: "Tourney-Italic";
+    src: url("Tourney_Expanded-Light.ttf");
+}
+
+@font-face {
+    font-family: "Tourney_SemiCondensed-Black";
+    src: url("Tourney_SemiCondensed-Black.ttf");
+}
+
 body {
     margin: 0;
+    font-family: "Tourney_SemiCondensed-Black";
+}
+
+button {
+    font-family: "Tourney_SemiCondensed-Black";
 }
 
 header,
@@ -7,6 +22,7 @@ footer {
     padding: 50px;
     background-color: rgb(6, 6, 105);
     color: aliceblue;
+    font-family: "Tourney-Italic";
 }
 
 header > h1 {
@@ -34,13 +50,13 @@ header > h1 {
 }
 
 .ngDiv {
-    border: solid;
+    border: none;
+    border-radius: 5px;
     position: absolute;
     z-index: 3;
     max-width: 400px;
     background-color: white;
-    box-shadow: 3px 3px 3px;
-    padding: 60px;
+    padding: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -58,6 +74,14 @@ header > h1 {
 .pveButton {
     padding: 20px;
     font-size: 35px;
+    border-radius: 5px;
+    border: none;
+}
+
+.pvpButton:hover,
+.pveButton:hover {
+    color: white;
+    background-color: rgb(6, 6, 105);
 }
 
 .idp {
@@ -69,8 +93,8 @@ header > h1 {
 }
 
 .giDiv {
-    box-shadow: 3px 3px 3px;
     padding: 40px;
+    border-radius: 5px;
     background-color: white;
     position: absolute;
     z-index: 3;
@@ -96,14 +120,26 @@ header > h1 {
 }
 
 input {
+    font-family: "Tourney_SemiCondensed-Black";
+    background-color: rgb(239, 239, 239);
+    border: none;
+    border-radius: 5px;
     width: 200px;
     font-size: 32px;
 }
 
 .pvpSubmit,
 .pveSubmit {
-    padding: 10px;
+    padding: 15px;
     font-size: 28px;
+    border-radius: 5px;
+    border: none;
+}
+
+.pvpSubmit:hover,
+.pveSubmit:hover {
+    background-color: rgb(6, 6, 105);
+    color: white;
 }
 
 /* used to hide things */
@@ -123,19 +159,26 @@ input {
 }
 
 .prepDiv {
-    padding: 20px;
+    padding: 40px;
+    border-radius: 5px;
     background-color: white;
     display: flex;
     flex-direction: column;
+    gap: 15px;
+}
+
+.prepH1 {
+    margin-bottom: 10px;
+}
+
+.p_mess {
+    margin-top: 0;
+    margin-bottom: 10px;
 }
 
 .placementDiv {
     display: flex;
     justify-content: space-evenly;
-}
-
-.placed {
-    background-color: green;
 }
 
 .prepGrid {
@@ -149,24 +192,70 @@ input {
 .prepBox {
     height: 30px;
     width: 30px;
-    background: grey;
+    background-color: grey;
 }
 
 .prepBox:hover {
-    background-color: orange;
+    border: solid;
+    border-width: 2px;
+    border-color: orange;
 }
 
-.shipSelector {
+.p_right {
+    width: 207px;
+}
+
+.shipsH2 {
+    margin-top: 0;
     margin-bottom: 10px;
 }
 
+.oriH3_1,
+.oriH3_2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.rtButton {
+    height: 30px;
+    width: 100px;
+    border: none;
+    border-radius: 5px;
+}
+
+.rtButton:hover {
+    background-color: rgb(6, 6, 105);
+    color: white;
+}
+
+.shipsDiv {
+    padding-top: 15px;
+}
+
+.shipSelector {
+    background-color: rgb(239, 239, 239);
+    margin-bottom: 5px;
+    border-radius: 5px;
+    font-size: 18px;
+    padding: 6px;
+}
+
 .selected {
-    background-color: blue;
+    background-color: rgb(6, 6, 105);
     color: white;
 }
 
 .prepSB {
     margin-top: 30px;
+    height: 30px;
+    width: 100px;
+    border: none;
+    border-radius: 5px;
+}
+
+.prepSB:hover {
+    color: white;
+    background-color: rgb(6, 6, 105);
 }
 
 /* game section */
@@ -175,9 +264,26 @@ input {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: space-between;
     padding: 20px;
     
+}
+
+.gsMessage {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.scores {
+    font-size: 24px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);    
+}
+
+.pscoreboard1,
+.pscoreboard2 {
+    margin: 15px;
+    text-align: center;
 }
 
 .boardContainer {
