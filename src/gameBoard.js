@@ -206,25 +206,42 @@ const gameBoardFactory = () => {
     };
 
     const receiveAttack = (yCoord, xCoord) => {
-        if (board[yCoord][xCoord] !== "" && board[yCoord][xCoord] !== "M" && board[yCoord][xCoord] !== "X") {
-            board[yCoord][xCoord].hit();
-            board[yCoord][xCoord].isSunk();
-            if (board[yCoord][xCoord].sunkStatus) sunkenCount++;
-            board[yCoord][xCoord] = "X";
-            if (allSunk()) {
-                gameOver = true;
-                return gameOver;
-            }
-            return "X";
+        let results = {
+            status: "",
+            sunk: null,
+            gameOver: false
+        };
+        if (board[yCoord][xCoord] === "") {
+            board[yCoord][xCoord] = "M";
+            results.status = "M";
+            return results;
 
         } else if (board[yCoord][xCoord] === "M" || board[yCoord][xCoord] === "X") {
             return "You cannot strike the same spot twice";
 
         } else {
-            board[yCoord][xCoord] = "M";
-            return "M"
+            board[yCoord][xCoord].hit();
+            board[yCoord][xCoord].isSunk();
+            results.status = "X";
+            if (board[yCoord][xCoord].sunkStatus) {
+                sunkenCount++;
+                results.sunk = true;
+                if (allSunk()) {
+                    results.gameOver = true;
+                    board[yCoord][xCoord] = "X";
+                    return results;
+    
+                } else {
+                    board[yCoord][xCoord] = "X";
+                    return results;
 
-        }   
+                }
+
+            }
+            board[yCoord][xCoord] = "X";
+            return results;
+
+        }
 
     };
 
