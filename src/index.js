@@ -24,6 +24,236 @@ const pve1Input = document.querySelector("#pve1Input");
 const gsMessage = document.querySelector(".gsMessage");
 const pScoreBoard1 = document.querySelector(".pscoreboard1");
 const pScoreBoard2 = document.querySelector(".pscoreboard2");
+const leftBoardO = document.querySelector(".gslO");
+const rightBoardO = document.querySelector(".gsrO");
+const gameTilesA = document.querySelectorAll(".board_a");
+const gameTilesB = document.querySelectorAll(".board_b");
+
+const setAIBoard = (board) => {
+    let totalPlaced = 0;
+    while (totalPlaced < 5) {
+        let orientation = Math.floor(Math.random()*2); // potentially switch orientation every loop, 0 for horizontal, 1 for vertical
+        let length = 0;
+        if (totalPlaced === 0) { // place the carrier
+            length = 5;
+            let xStart = Math.floor(Math.random()*10);
+            let yStart = Math.floor(Math.random()*10);
+            if (orientation === 0) {
+                if ((xStart + length < 10) && (10 - xStart >= length)) {
+                    if (board.getBoard()[yStart][xStart] === "" && board.getBoard()[yStart][xStart+1] === "" && board.getBoard()[yStart][xStart+2] === "" && board.getBoard()[yStart][xStart+3] === "" && board.getBoard()[yStart][xStart+4] === "") {
+                        board.placeAIShip(5, yStart, xStart, orientation);
+                        totalPlaced++;
+                    }
+                    
+                }
+
+            } else if (orientation === 1) {
+                if ((yStart + length < 10) && (10 - yStart >= length)) {
+                    if (board.getBoard()[yStart][xStart] === "" && board.getBoard()[yStart+1][xStart] === "" && board.getBoard()[yStart+2][xStart] === "" && board.getBoard()[yStart+3][xStart] === "" && board.getBoard()[yStart+4][xStart] === "") {
+                        board.placeAIShip(5, yStart, xStart, orientation);
+                        totalPlaced++;
+                    }
+                }
+
+            }
+
+        } else if (totalPlaced === 1) { // place the battleship
+            length = 4;
+            let xStart = Math.floor(Math.random()*10);
+            let yStart = Math.floor(Math.random()*10);
+            if (orientation === 0) {
+                if ((xStart + length < 10) && (10 - xStart >= length)) {
+                    if (board.getBoard()[yStart][xStart] === "" && board.getBoard()[yStart][xStart+1] === "" && board.getBoard()[yStart][xStart+2] === "" && board.getBoard()[yStart][xStart+3] === "") {
+                        board.placeAIShip(4, yStart, xStart, orientation);
+                        totalPlaced++;
+                    }
+                }
+
+            } else if (orientation === 1) {
+                if ((yStart + length < 10) && (10 - yStart >= length)) {
+                    if (board.getBoard()[yStart][xStart] === "" && board.getBoard()[yStart+1][xStart] === "" && board.getBoard()[yStart+2][xStart] === "" && board.getBoard()[yStart+3][xStart] === "") {
+                        board.placeAIShip(4, yStart, xStart, orientation);
+                        totalPlaced++;
+                    }
+                }
+
+            }
+
+        } else if (totalPlaced === 2) { // place the cruiser
+            length = 3;
+            let xStart = Math.floor(Math.random()*10);
+            let yStart = Math.floor(Math.random()*10);
+            if (orientation === 0) {
+                if ((xStart + length < 10) && (10 - xStart >= length)) {
+                    if (board.getBoard()[yStart][xStart] === "" && board.getBoard()[yStart][xStart+1] === "" && board.getBoard()[yStart][xStart+2] === "") {
+                        board.placeAIShip(3, yStart, xStart, orientation);
+                        totalPlaced++;
+                    }
+                }
+
+            } else if (orientation === 1) {
+                if ((yStart + length < 10) && (10 - yStart >= length)) {
+                    if (board.getBoard()[yStart][xStart] === "" && board.getBoard()[yStart+1][xStart] === "" && board.getBoard()[yStart+2][xStart] === "") {
+                        board.placeAIShip(3, yStart, xStart, orientation);
+                        totalPlaced++;
+                    }
+                }
+
+            }
+
+        } else if (totalPlaced === 3) { // place the sub
+            length = 3;
+            let xStart = Math.floor(Math.random()*10);
+            let yStart = Math.floor(Math.random()*10);
+            if (orientation === 0) {
+                if ((xStart + length < 10) && (10 - xStart >= length)) {
+                    if (board.getBoard()[yStart][xStart] === "" && board.getBoard()[yStart][xStart+1] === "" && board.getBoard()[yStart][xStart+2] === "") {
+                        board.placeAIShip(3, yStart, xStart, orientation);
+                        totalPlaced++;
+                    }
+                }
+
+            } else if (orientation === 1) {
+                if ((yStart + length < 10) && (10 - yStart >= length)) {
+                    if (board.getBoard()[yStart][xStart] === "" && board.getBoard()[yStart+1][xStart] === "" && board.getBoard()[yStart+2][xStart] === "") {
+                        board.placeAIShip(3, yStart, xStart, orientation);
+                        totalPlaced++;
+                    }
+                }
+
+            }
+
+        } else if (totalPlaced === 4) { // place the destroyer
+            length = 2;
+            let xStart = Math.floor(Math.random()*10);
+            let yStart = Math.floor(Math.random()*10);
+            if (orientation === 0) {
+                if ((xStart + length < 10) && (10 - xStart >= length)) {
+                    if (board.getBoard()[yStart][xStart] === "" && board.getBoard()[yStart][xStart+1] === "") {
+                        board.placeAIShip(2, yStart, xStart, orientation);
+                        totalPlaced++;
+                    }
+                }
+
+            } else if (orientation === 1) {
+                if ((yStart + length < 10) && (10 - yStart >= length)) {
+                    if (board.getBoard()[yStart][xStart] === "" && board.getBoard()[yStart+1][xStart] === "") {
+                        board.placeAIShip(2, yStart, xStart, orientation);
+                        totalPlaced++;
+                    }
+                }
+
+            }
+
+        }
+        
+    };
+}
+
+const aiAttack = (enemyBoard, humanName) => {
+
+    let miss = false;
+    let xCoord = 0;
+    let yCoord = 0;
+    let neighbors = [];
+    let attack;
+    let targetTile;
+
+    while (!miss) {
+        xCoord = Math.floor(Math.random()*10);
+        yCoord = Math.floor(Math.random()*10);
+
+        if (neighbors.length !== 0) {
+            console.log("test");
+            // final trick is to make the AI smarter
+
+        } else {
+            attack = enemyBoard.receiveAttack(yCoord, xCoord);
+            // console.log(`x: ${xCoord}, y: ${yCoord}`);
+            // console.log(`attack result: ${attack}`);
+            // console.log(enemyBoard.getBoard());
+            if (attack === "You cannot strike the same spot twice") {
+                gsMessage.innerText = `Message: Try again. ${attack}.`;
+
+            } else if (attack.gameOver === true) {
+                gsMessage.innerText = `Message: Game Over! AI Wins! Refresh the browser to play again.`;
+                pScoreBoard1.innerText = `${humanName} has ${5 - Number(enemyBoard.getSunkenCount())} ships left.`;
+                targetTile = document.querySelector(`#m_a_${xCoord}${yCoord}`);
+                targetTile.style.backgroundColor = "red";
+                overlayDiv.classList.remove("hide");
+                return;
+
+            } else if (attack.status === "M") {
+                gsMessage.innerText = `Message: AI missed. Switching turns.`;
+                pScoreBoard1.innerText = `${humanName} has ${5 - Number(enemyBoard.getSunkenCount())} ships left.`;
+                targetTile = document.querySelector(`#m_a_${xCoord}${yCoord}`);
+                targetTile.style.backgroundColor = "cyan";
+                miss = true;
+
+            } else {
+                if (attack.sunk === true) {
+                    gsMessage.innerText = `Message: Ship sunk! AI may fire again.`;
+                    pScoreBoard1.innerText = `${humanName} has ${5 - Number(enemyBoard.getSunkenCount())} ships left.`;
+                    targetTile = document.querySelector(`#m_a_${xCoord}${yCoord}`);
+                    targetTile.style.backgroundColor = "red";
+                    neighbors = [];
+
+                } else {
+                    gsMessage.innerText = `Message: Hit! AI may fire again.`;
+                    pScoreBoard1.innerText = `${humanName} has ${5 - Number(enemyBoard.getSunkenCount())} ships left.`;
+                    targetTile = document.querySelector(`#m_a_${xCoord}${yCoord}`);
+                    targetTile.style.backgroundColor = "red";
+                    
+                }
+
+            }
+
+
+        }                    
+        
+    }
+
+}
+
+const paintTiles = (board, order) => {
+    let boardLayout = board.getBoard();
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            const targetPrepBox = document.querySelector(`#${order}_${j}${i}`);
+            (boardLayout[i][j] !== "") ? targetPrepBox.style.backgroundColor = "green" : targetPrepBox.style.backgroundColor = "grey";
+        }
+    }
+
+}
+
+const cleanTheBoard = (board, lengthOfShip, statusOfCruiser) => {
+    if (lengthOfShip !== 3) {
+        for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < 10; j ++) {
+                if (board[i][j].shipLength === lengthOfShip) board[i][j] = "";
+            }
+        }
+
+    } else {
+        if (statusOfCruiser) {
+            for (let i = 0; i < 10; i++) {
+                for (let j = 0; j < 10; j ++) {
+                    if (board[i][j].cruiserStatus === true) board[i][j] = "";
+                }
+            }
+
+        } else {
+            for (let i = 0; i < 10; i++) {
+                for (let j = 0; j < 10; j ++) {
+                    if (board[i][j].cruiserStatus === false) board[i][j] = "";
+                }
+            }
+
+        }
+
+    }
+    
+}
 
 pvpButton.addEventListener("click", (e) => {
     newGameDiv.classList.add("hide");
@@ -45,9 +275,9 @@ pvpSubmitButton.addEventListener("click", (e) => {
         const name1 = pvp1Input.value;
         const name2 = pvp2Input.value;
         let p1Name = document.querySelector(".p1name");
-        p1Name.innerText = name1;
+        p1Name.innerText = `${name1}'s Board:`;
         let p2Name = document.querySelector(".p2name")
-        p2Name.innerText = name2;
+        p2Name.innerText = `${name2}'s Board:`;
         let newP1score = document.querySelector(".pscoreboard1");
         let newP2score = document.querySelector(".pscoreboard2");
         newP1score.innerText = `${name1} has 5 ships left.`;
@@ -91,46 +321,6 @@ pvpSubmitButton.addEventListener("click", (e) => {
         const prep2Tiles = document.querySelectorAll(".prepboard_b");
         let prepSubmit2 = document.querySelector("[data-submitButton='2']");
         prepSubmit2.disabled = true;
-        const gameTilesA = document.querySelectorAll(".board_a");
-        const gameTilesB = document.querySelectorAll(".board_b");
-        const paintTiles = (board, order) => {
-            let boardLayout = board.getBoard();
-            for (let i = 0; i < 10; i++) {
-                for (let j = 0; j < 10; j++) {
-                    const targetPrepBox = document.querySelector(`#${order}_${j}${i}`);
-                    (boardLayout[i][j] !== "") ? targetPrepBox.style.backgroundColor = "green" : targetPrepBox.style.backgroundColor = "grey";
-                }
-            }
-
-        }
-        const cleanTheBoard = (board, lengthOfShip, statusOfCruiser) => {
-            if (lengthOfShip !== 3) {
-                for (let i = 0; i < 10; i++) {
-                    for (let j = 0; j < 10; j ++) {
-                        if (board[i][j].shipLength === lengthOfShip) board[i][j] = "";
-                    }
-                }
-
-            } else {
-                if (statusOfCruiser) {
-                    for (let i = 0; i < 10; i++) {
-                        for (let j = 0; j < 10; j ++) {
-                            if (board[i][j].cruiserStatus === true) board[i][j] = "";
-                        }
-                    }
-
-                } else {
-                    for (let i = 0; i < 10; i++) {
-                        for (let j = 0; j < 10; j ++) {
-                            if (board[i][j].cruiserStatus === false) board[i][j] = "";
-                        }
-                    }
-
-                }
-
-            }
-            
-        }
 
         rotate1.addEventListener("click", (e) => {
             pvpBoard1.rotateShip();
@@ -595,9 +785,11 @@ pvpSubmitButton.addEventListener("click", (e) => {
                 prepDivP2.style = "display: none;";
                 prepParent.classList.add("hide");
                 overlayDiv.classList.add("hide");
+                leftBoardO.classList.add("overlayHalf");
             });
         });
-
+        // testing 
+        
         gameTilesA.forEach(tiles => tiles.addEventListener("click", (e) => {
             let tileId = e.target.getAttribute("id");
             let idArray = tileId.split("");
@@ -606,14 +798,18 @@ pvpSubmitButton.addEventListener("click", (e) => {
                 gsMessage.innerText = `Message: Try again. ${attack}.`;
 
             } else if (attack.gameOver === true) {
-                gsMessage.innerText = `Message: Game Over! ${name2} Wins!`;
+                gsMessage.innerText = `Message: Game Over! ${name2} Wins! Refresh the browser to play again.`;
                 pScoreBoard1.innerText = `${name1} has ${5 - Number(pvpBoard1.getSunkenCount())} ships left.`;
                 e.target.style.backgroundColor = "red";
+                overlayDiv.classList.remove("hide");
+                rightBoardO.classList.remove("overlayHalf");
 
             } else if (attack.status === "M") {
                 gsMessage.innerText = `Message: ${name2} missed. Switching turns.`;
                 pScoreBoard1.innerText = `${name1} has ${5 - Number(pvpBoard1.getSunkenCount())} ships left.`;
                 e.target.style.backgroundColor = "cyan";
+                rightBoardO.classList.remove("overlayHalf");
+                leftBoardO.classList.add("overlayHalf");
 
             } else {
                 if (attack.sunk === true) {
@@ -640,14 +836,18 @@ pvpSubmitButton.addEventListener("click", (e) => {
                 gsMessage.innerText = `Message: Try again. ${attack}.`;
 
             } else if (attack.gameOver === true) {
-                gsMessage.innerText = `Message: Game Over! ${name1} Wins!`;
+                gsMessage.innerText = `Message: Game Over! ${name1} Wins! Refresh the browser to play again.`;
                 pScoreBoard2.innerText = `${name2} has ${5 - Number(pvpBoard2.getSunkenCount())} ships left.`;
                 e.target.style.backgroundColor = "red";
+                overlayDiv.classList.remove("hide");
+                leftBoardO.classList.remove("overlayHalf");
 
             } else if (attack.status === "M") {
                 gsMessage.innerText = `Message: ${name1} missed. Switching turns.`;
                 pScoreBoard2.innerText = `${name2} has ${5 - Number(pvpBoard2.getSunkenCount())} ships left.`;
                 e.target.style.backgroundColor = "cyan";
+                leftBoardO.classList.remove("overlayHalf");
+                rightBoardO.classList.add("overlayHalf");
 
             } else {
                 if (attack.sunk === true) {
@@ -678,147 +878,17 @@ pveSubmitButton.addEventListener("click", (e) => {
         let p1eSB = document.querySelector(".pscoreboard1");
         p1eSB.innerText = `${name1} has 5 ships left.`;
         let p1Name = document.querySelector(".p1name");
-        p1Name.innerText = `${name1}`;
+        p1Name.innerText = `${name1}'s Board:`;
         let aiName = "AI";
         let p2eSB = document.querySelector(".pscoreboard2");
         p2eSB.innerText = `${aiName} has 5 ships left.`;
         let p2Name = document.querySelector(".p2name");
-        p2Name.innerText = `${aiName}`;
+        p2Name.innerText = `${aiName}'s Board:`;
         let aiBoard = gameBoardFactory();
         gameInformationDiv.classList.add("hide");
         let pregamePrep1 = prepDivFactory(pve1Input.value, 1);
         prepParent.appendChild(pregamePrep1);
-
-        // randomly set AI board here
-
-        const setAIBoard = () => {
-
-            // need to prevent overflow from the array -> look at length properties
-            // need to figure out what is wrong with vertical orientation conditionals
-            // after that we're set
-
-            let totalPlaced = 0;
-            // control lengths thru conditionals
-            while (totalPlaced < 5) {
-                let orientation = Math.floor(Math.random()*2); // potentially switch orientation every loop, 0 for horizontal, 1 for vertical
-                let length = 0;
-                if (totalPlaced === 0) { // place the carrier
-                    length = 5;
-                    let xStart = Math.floor(Math.random()*10);
-                    let yStart = Math.floor(Math.random()*10);
-                    if (orientation === 0) {
-                        if ((xStart + length < 10) && (10 - xStart >= length)) {
-                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart][xStart+1] === "" && aiBoard.getBoard()[yStart][xStart+2] === "" && aiBoard.getBoard()[yStart][xStart+3] === "" && aiBoard.getBoard()[yStart][xStart+4] === "") {
-                                aiBoard.placeAIShip(5, yStart, xStart, orientation);
-                                totalPlaced++;
-                            }
-                            
-                        }
-
-                    } else if (orientation === 1) {
-                        if ((yStart + length < 10) && (10 - yStart >= length)) {
-                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart+1][xStart] === "" && aiBoard.getBoard()[yStart+2][xStart] === "" && aiBoard.getBoard()[yStart+3][xStart] === "" && aiBoard.getBoard()[yStart+4][xStart] === "") {
-                                aiBoard.placeAIShip(5, yStart, xStart, orientation);
-                                totalPlaced++;
-                            }
-                        }
-
-                    }
-
-                } else if (totalPlaced === 1) { // place the battleship
-                    length = 4;
-                    let xStart = Math.floor(Math.random()*10);
-                    let yStart = Math.floor(Math.random()*10);
-                    if (orientation === 0) {
-                        if ((xStart + length < 10) && (10 - xStart >= length)) {
-                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart][xStart+1] === "" && aiBoard.getBoard()[yStart][xStart+2] === "" && aiBoard.getBoard()[yStart][xStart+3] === "") {
-                                aiBoard.placeAIShip(4, yStart, xStart, orientation);
-                                totalPlaced++;
-                            }
-                        }
-
-                    } else if (orientation === 1) {
-                        if ((yStart + length < 10) && (10 - yStart >= length)) {
-                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart+1][xStart] === "" && aiBoard.getBoard()[yStart+2][xStart] === "" && aiBoard.getBoard()[yStart+3][xStart] === "") {
-                                aiBoard.placeAIShip(4, yStart, xStart, orientation);
-                                totalPlaced++;
-                            }
-                        }
-
-                    }
-
-                } else if (totalPlaced === 2) { // place the cruiser
-                    length = 3;
-                    let xStart = Math.floor(Math.random()*10);
-                    let yStart = Math.floor(Math.random()*10);
-                    if (orientation === 0) {
-                        if ((xStart + length < 10) && (10 - xStart >= length)) {
-                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart][xStart+1] === "" && aiBoard.getBoard()[yStart][xStart+2] === "") {
-                                aiBoard.placeAIShip(3, yStart, xStart, orientation);
-                                totalPlaced++;
-                            }
-                        }
-
-                    } else if (orientation === 1) {
-                        if ((yStart + length < 10) && (10 - yStart >= length)) {
-                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart+1][xStart] === "" && aiBoard.getBoard()[yStart+2][xStart] === "") {
-                                aiBoard.placeAIShip(3, yStart, xStart, orientation);
-                                totalPlaced++;
-                            }
-                        }
-
-                    }
-
-                } else if (totalPlaced === 3) { // place the sub
-                    length = 3;
-                    let xStart = Math.floor(Math.random()*10);
-                    let yStart = Math.floor(Math.random()*10);
-                    if (orientation === 0) {
-                        if ((xStart + length < 10) && (10 - xStart >= length)) {
-                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart][xStart+1] === "" && aiBoard.getBoard()[yStart][xStart+2] === "") {
-                                aiBoard.placeAIShip(3, yStart, xStart, orientation);
-                                totalPlaced++;
-                            }
-                        }
-
-                    } else if (orientation === 1) {
-                        if ((yStart + length < 10) && (10 - yStart >= length)) {
-                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart+1][xStart] === "" && aiBoard.getBoard()[yStart+2][xStart] === "") {
-                                aiBoard.placeAIShip(3, yStart, xStart, orientation);
-                                totalPlaced++;
-                            }
-                        }
-
-                    }
-
-                } else if (totalPlaced === 4) { // place the destroyer
-                    length = 2;
-                    let xStart = Math.floor(Math.random()*10);
-                    let yStart = Math.floor(Math.random()*10);
-                    if (orientation === 0) {
-                        if ((xStart + length < 10) && (10 - xStart >= length)) {
-                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart][xStart+1] === "") {
-                                aiBoard.placeAIShip(2, yStart, xStart, orientation);
-                                totalPlaced++;
-                            }
-                        }
-
-                    } else if (orientation === 1) {
-                        if ((yStart + length < 10) && (10 - yStart >= length)) {
-                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart+1][xStart] === "") {
-                                aiBoard.placeAIShip(2, yStart, xStart, orientation);
-                                totalPlaced++;
-                            }
-                        }
-
-                    }
-
-                }
-                
-            };
-        }
-
-        setAIBoard();
+        setAIBoard(aiBoard);
         console.log(aiBoard.getBoard());
         
         // create players here
@@ -838,44 +908,6 @@ pveSubmitButton.addEventListener("click", (e) => {
         const prep1Tiles = document.querySelectorAll(".prepboard_a");
         let prepSubmit1 = document.querySelector("[data-submitButton='1']");
         prepSubmit1.disabled = true;
-        const paintTiles = (board, order) => {
-            let boardLayout = board.getBoard();
-            for (let i = 0; i < 10; i++) {
-                for (let j = 0; j < 10; j++) {
-                    const targetPrepBox = document.querySelector(`#${order}_${j}${i}`);
-                    (boardLayout[i][j] !== "") ? targetPrepBox.style.backgroundColor = "green" : targetPrepBox.style.backgroundColor = "grey";
-                }
-            }
-
-        }
-        const cleanTheBoard = (board, lengthOfShip, statusOfCruiser) => {
-            if (lengthOfShip !== 3) {
-                for (let i = 0; i < 10; i++) {
-                    for (let j = 0; j < 10; j ++) {
-                        if (board[i][j].shipLength === lengthOfShip) board[i][j] = "";
-                    }
-                }
-
-            } else {
-                if (statusOfCruiser) {
-                    for (let i = 0; i < 10; i++) {
-                        for (let j = 0; j < 10; j ++) {
-                            if (board[i][j].cruiserStatus === true) board[i][j] = "";
-                        }
-                    }
-
-                } else {
-                    for (let i = 0; i < 10; i++) {
-                        for (let j = 0; j < 10; j ++) {
-                            if (board[i][j].cruiserStatus === false) board[i][j] = "";
-                        }
-                    }
-
-                }
-
-            }
-            
-        }
 
         rotate1.addEventListener("click", (e) => {
             pveBoard1.rotateShip();
@@ -1111,34 +1143,35 @@ pveSubmitButton.addEventListener("click", (e) => {
             prepDivP1.style = "display: none;";
             prepParent.classList.add("hide");
             overlayDiv.classList.add("hide");
-            // ai placement of ships
 
             gameTilesB.forEach(tiles => tiles.addEventListener("click", (e) => {
                 let tileId = e.target.getAttribute("id");
                 let idArray = tileId.split("");
-                let attack = pvpBoard2.receiveAttack(Number(idArray[5]), Number(idArray[4]));
+                let attack = aiBoard.receiveAttack(Number(idArray[5]), Number(idArray[4]));
                 if (attack === "You cannot strike the same spot twice") {
                     gsMessage.innerText = `Message: Try again. ${attack}.`;
     
                 } else if (attack.gameOver === true) {
                     gsMessage.innerText = `Message: Game Over! ${name1} Wins!`;
-                    pScoreBoard2.innerText = `${name2} has ${5 - Number(pvpBoard2.getSunkenCount())} ships left.`;
+                    pScoreBoard2.innerText = `${aiName} has ${5 - Number(aiBoard.getSunkenCount())} ships left.`;
                     e.target.style.backgroundColor = "red";
+                    overlayDiv.classList.remove("hide");
     
                 } else if (attack.status === "M") {
                     gsMessage.innerText = `Message: ${name1} missed. Switching turns.`;
-                    pScoreBoard2.innerText = `${name2} has ${5 - Number(pvpBoard2.getSunkenCount())} ships left.`;
+                    pScoreBoard2.innerText = `${aiName} has ${5 - Number(aiBoard.getSunkenCount())} ships left.`;
                     e.target.style.backgroundColor = "cyan";
+                    aiAttack(pveBoard1, name1);
     
                 } else {
                     if (attack.sunk === true) {
                         gsMessage.innerText = `Message: Ship sunk! ${name1} may fire again.`;
-                        pScoreBoard2.innerText = `${name2} has ${5 - Number(pvpBoard2.getSunkenCount())} ships left.`;
+                        pScoreBoard2.innerText = `${aiName} has ${5 - Number(aiBoard.getSunkenCount())} ships left.`;
                         e.target.style.backgroundColor = "red";
     
                     } else {
                         gsMessage.innerText = `Message: Hit! ${name1} may fire again.`;
-                        pScoreBoard2.innerText = `${name2} has ${5 - Number(pvpBoard2.getSunkenCount())} ships left.`;
+                        pScoreBoard2.innerText = `${aiName} has ${5 - Number(aiBoard.getSunkenCount())} ships left.`;
                         e.target.style.backgroundColor = "red";
     
                     }
@@ -1146,10 +1179,6 @@ pveSubmitButton.addEventListener("click", (e) => {
                 }
                 
             }));
-
-
-
-
 
         });
     }
