@@ -107,8 +107,12 @@ const loadUI = (body) => {
     boardContainer.classList.add("boardContainer");
     const gsLeft = document.createElement("div");
     gsLeft.classList.add("gsLeft");
+    const gsLeftOverlay = document.createElement("div");
+    gsLeftOverlay.classList.add("gslO");
     const gsRight = document.createElement("div");
     gsRight.classList.add("gsRight");
+    const gsRightOverlay = document.createElement("div");
+    gsRightOverlay.classList.add("gsrO");
     gameSection.appendChild(gsScoreboardDiv);
     gsScoreboardDiv.appendChild(gsMessage);
     gsScoreboardDiv.appendChild(scoreContainer);
@@ -129,8 +133,10 @@ const loadUI = (body) => {
     p1Board.setAttribute("id", "p1Board");
     const p2Board = document.createElement("div");
     p2Board.setAttribute("id", "p2Board");
+    gsLeft.appendChild(gsLeftOverlay);
     gsLeft.appendChild(gsLeftH2);
     gsLeft.appendChild(p1Board);
+    gsRight.appendChild(gsRightOverlay);
     gsRight.appendChild(gsRightH2);
     gsRight.appendChild(p2Board);
     const rowCreator = (grid, order, rowNumber) => {
