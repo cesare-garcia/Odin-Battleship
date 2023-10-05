@@ -674,11 +674,153 @@ pveSubmitButton.addEventListener("click", (e) => {
     if (pve1Input.checkValidity()) {
         e.preventDefault();
         let pveBoard1 = gameBoardFactory();
+        let name1 = document.querySelector("#pve1Input").value;
+        let p1eSB = document.querySelector(".pscoreboard1");
+        p1eSB.innerText = `${name1} has 5 ships left.`;
+        let p1Name = document.querySelector(".p1name");
+        p1Name.innerText = `${name1}`;
+        let aiName = "AI";
+        let p2eSB = document.querySelector(".pscoreboard2");
+        p2eSB.innerText = `${aiName} has 5 ships left.`;
+        let p2Name = document.querySelector(".p2name");
+        p2Name.innerText = `${aiName}`;
         let aiBoard = gameBoardFactory();
         gameInformationDiv.classList.add("hide");
         let pregamePrep1 = prepDivFactory(pve1Input.value, 1);
         prepParent.appendChild(pregamePrep1);
 
+        // randomly set AI board here
+
+        const setAIBoard = () => {
+
+            // need to prevent overflow from the array -> look at length properties
+            // need to figure out what is wrong with vertical orientation conditionals
+            // after that we're set
+
+            let totalPlaced = 0;
+            // control lengths thru conditionals
+            while (totalPlaced < 5) {
+                let orientation = Math.floor(Math.random()*2); // potentially switch orientation every loop, 0 for horizontal, 1 for vertical
+                let length = 0;
+                if (totalPlaced === 0) { // place the carrier
+                    length = 5;
+                    let xStart = Math.floor(Math.random()*10);
+                    let yStart = Math.floor(Math.random()*10);
+                    if (orientation === 0) {
+                        if ((xStart + length < 10) && (10 - xStart >= length)) {
+                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart][xStart+1] === "" && aiBoard.getBoard()[yStart][xStart+2] === "" && aiBoard.getBoard()[yStart][xStart+3] === "" && aiBoard.getBoard()[yStart][xStart+4] === "") {
+                                aiBoard.placeAIShip(5, yStart, xStart, orientation);
+                                totalPlaced++;
+                            }
+                            
+                        }
+
+                    } else if (orientation === 1) {
+                        if ((yStart + length < 10) && (10 - yStart >= length)) {
+                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart+1][xStart] === "" && aiBoard.getBoard()[yStart+2][xStart] === "" && aiBoard.getBoard()[yStart+3][xStart] === "" && aiBoard.getBoard()[yStart+4][xStart] === "") {
+                                aiBoard.placeAIShip(5, yStart, xStart, orientation);
+                                totalPlaced++;
+                            }
+                        }
+
+                    }
+
+                } else if (totalPlaced === 1) { // place the battleship
+                    length = 4;
+                    let xStart = Math.floor(Math.random()*10);
+                    let yStart = Math.floor(Math.random()*10);
+                    if (orientation === 0) {
+                        if ((xStart + length < 10) && (10 - xStart >= length)) {
+                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart][xStart+1] === "" && aiBoard.getBoard()[yStart][xStart+2] === "" && aiBoard.getBoard()[yStart][xStart+3] === "") {
+                                aiBoard.placeAIShip(4, yStart, xStart, orientation);
+                                totalPlaced++;
+                            }
+                        }
+
+                    } else if (orientation === 1) {
+                        if ((yStart + length < 10) && (10 - yStart >= length)) {
+                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart+1][xStart] === "" && aiBoard.getBoard()[yStart+2][xStart] === "" && aiBoard.getBoard()[yStart+3][xStart] === "") {
+                                aiBoard.placeAIShip(4, yStart, xStart, orientation);
+                                totalPlaced++;
+                            }
+                        }
+
+                    }
+
+                } else if (totalPlaced === 2) { // place the cruiser
+                    length = 3;
+                    let xStart = Math.floor(Math.random()*10);
+                    let yStart = Math.floor(Math.random()*10);
+                    if (orientation === 0) {
+                        if ((xStart + length < 10) && (10 - xStart >= length)) {
+                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart][xStart+1] === "" && aiBoard.getBoard()[yStart][xStart+2] === "") {
+                                aiBoard.placeAIShip(3, yStart, xStart, orientation);
+                                totalPlaced++;
+                            }
+                        }
+
+                    } else if (orientation === 1) {
+                        if ((yStart + length < 10) && (10 - yStart >= length)) {
+                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart+1][xStart] === "" && aiBoard.getBoard()[yStart+2][xStart] === "") {
+                                aiBoard.placeAIShip(3, yStart, xStart, orientation);
+                                totalPlaced++;
+                            }
+                        }
+
+                    }
+
+                } else if (totalPlaced === 3) { // place the sub
+                    length = 3;
+                    let xStart = Math.floor(Math.random()*10);
+                    let yStart = Math.floor(Math.random()*10);
+                    if (orientation === 0) {
+                        if ((xStart + length < 10) && (10 - xStart >= length)) {
+                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart][xStart+1] === "" && aiBoard.getBoard()[yStart][xStart+2] === "") {
+                                aiBoard.placeAIShip(3, yStart, xStart, orientation);
+                                totalPlaced++;
+                            }
+                        }
+
+                    } else if (orientation === 1) {
+                        if ((yStart + length < 10) && (10 - yStart >= length)) {
+                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart+1][xStart] === "" && aiBoard.getBoard()[yStart+2][xStart] === "") {
+                                aiBoard.placeAIShip(3, yStart, xStart, orientation);
+                                totalPlaced++;
+                            }
+                        }
+
+                    }
+
+                } else if (totalPlaced === 4) { // place the destroyer
+                    length = 2;
+                    let xStart = Math.floor(Math.random()*10);
+                    let yStart = Math.floor(Math.random()*10);
+                    if (orientation === 0) {
+                        if ((xStart + length < 10) && (10 - xStart >= length)) {
+                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart][xStart+1] === "") {
+                                aiBoard.placeAIShip(2, yStart, xStart, orientation);
+                                totalPlaced++;
+                            }
+                        }
+
+                    } else if (orientation === 1) {
+                        if ((yStart + length < 10) && (10 - yStart >= length)) {
+                            if (aiBoard.getBoard()[yStart][xStart] === "" && aiBoard.getBoard()[yStart+1][xStart] === "") {
+                                aiBoard.placeAIShip(2, yStart, xStart, orientation);
+                                totalPlaced++;
+                            }
+                        }
+
+                    }
+
+                }
+                
+            };
+        }
+
+        setAIBoard();
+        console.log(aiBoard.getBoard());
+        
         // create players here
 
         pveForm.reset();
@@ -970,6 +1112,45 @@ pveSubmitButton.addEventListener("click", (e) => {
             prepParent.classList.add("hide");
             overlayDiv.classList.add("hide");
             // ai placement of ships
+
+            gameTilesB.forEach(tiles => tiles.addEventListener("click", (e) => {
+                let tileId = e.target.getAttribute("id");
+                let idArray = tileId.split("");
+                let attack = pvpBoard2.receiveAttack(Number(idArray[5]), Number(idArray[4]));
+                if (attack === "You cannot strike the same spot twice") {
+                    gsMessage.innerText = `Message: Try again. ${attack}.`;
+    
+                } else if (attack.gameOver === true) {
+                    gsMessage.innerText = `Message: Game Over! ${name1} Wins!`;
+                    pScoreBoard2.innerText = `${name2} has ${5 - Number(pvpBoard2.getSunkenCount())} ships left.`;
+                    e.target.style.backgroundColor = "red";
+    
+                } else if (attack.status === "M") {
+                    gsMessage.innerText = `Message: ${name1} missed. Switching turns.`;
+                    pScoreBoard2.innerText = `${name2} has ${5 - Number(pvpBoard2.getSunkenCount())} ships left.`;
+                    e.target.style.backgroundColor = "cyan";
+    
+                } else {
+                    if (attack.sunk === true) {
+                        gsMessage.innerText = `Message: Ship sunk! ${name1} may fire again.`;
+                        pScoreBoard2.innerText = `${name2} has ${5 - Number(pvpBoard2.getSunkenCount())} ships left.`;
+                        e.target.style.backgroundColor = "red";
+    
+                    } else {
+                        gsMessage.innerText = `Message: Hit! ${name1} may fire again.`;
+                        pScoreBoard2.innerText = `${name2} has ${5 - Number(pvpBoard2.getSunkenCount())} ships left.`;
+                        e.target.style.backgroundColor = "red";
+    
+                    }
+    
+                }
+                
+            }));
+
+
+
+
+
         });
     }
 });

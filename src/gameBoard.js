@@ -56,6 +56,66 @@ const gameBoardFactory = () => {
             }
         };
     };
+
+    const placeAIShip = (shipLength, yCoord, xCoord, aiOrientation) => {
+        if (shipLength === 5) {
+            let carrier = shipFactory(shipLength, null);
+            if (aiOrientation === 0) { // horizontal
+                for (let i = xCoord; i < xCoord + shipLength; i++) {
+                    board[yCoord][i] = carrier;
+                }
+
+            } else { // 1 which is vertical
+                for (let i = yCoord; i < yCoord + shipLength; i++) {
+                    board[i][xCoord] = carrier;
+                }
+
+            }
+
+        } else if (shipLength === 4) {
+            let battleship = shipFactory(shipLength, null);
+            if (aiOrientation === 0) {
+                for (let i = xCoord; i < xCoord + shipLength; i++) {
+                    board[yCoord][i] = battleship;
+                }
+
+            } else {
+                for (let i = yCoord; i < yCoord + shipLength; i++) {
+                    board[i][xCoord] = battleship;
+                }
+
+            }
+
+        } else if (shipLength === 3) {
+            let threeHitter = shipFactory(shipLength, null);
+            if (aiOrientation === 0) {
+                for (let i = xCoord; i < xCoord + shipLength; i++) {
+                    board[yCoord][i] = threeHitter;
+                }
+                
+            } else {
+                for (let i = yCoord; i < yCoord + shipLength; i++) {
+                    board[i][xCoord] = threeHitter;
+                }
+                
+            }
+
+        } else if (shipLength === 2) {
+            let destroyer = shipFactory(shipLength, null);
+            if (aiOrientation === 0) {
+                for (let i = xCoord; i < xCoord + shipLength; i++) {
+                    board[yCoord][i] = destroyer;
+                }
+                
+            } else {
+                for (let i = yCoord; i < yCoord + shipLength; i++) {
+                    board[i][xCoord] = destroyer;
+                }
+
+            }
+
+        }
+    }
     
     const placeShip = (shipLength, yCoord, xCoord, cruiserStat) => {
         if (shipLength === 5) {
@@ -268,6 +328,7 @@ const gameBoardFactory = () => {
         rotateShip,
         getShipOrientation, 
         placeShip,
+        placeAIShip,
         receiveAttack,
         getShips
     };
