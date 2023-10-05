@@ -49,6 +49,15 @@ header > h1 {
     width: 100%;
 }
 
+.overlayHalf {
+    background-color: black;
+    opacity: .5;
+    position: fixed;
+    z-index: 2;
+    height: inherit;
+    width: inherit;
+}
+
 .ngDiv {
     border: none;
     border-radius: 5px;
@@ -266,6 +275,22 @@ input {
     justify-content: center;
     padding: 20px;
     
+}
+
+.gsRight {
+    position: relative;
+}
+
+.gsLeft {
+    position: relative;
+}
+
+.overlayHalf {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
 }
 
 .gsMessage {
