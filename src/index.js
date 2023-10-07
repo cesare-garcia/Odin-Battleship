@@ -28,6 +28,7 @@ const leftBoardO = document.querySelector(".gslO");
 const rightBoardO = document.querySelector(".gsrO");
 const gameTilesA = document.querySelectorAll(".board_a");
 const gameTilesB = document.querySelectorAll(".board_b");
+let neighbors = [];
 
 const setAIBoard = (board) => {
     let totalPlaced = 0;
@@ -150,12 +151,11 @@ const setAIBoard = (board) => {
     };
 }
 
-const aiAttack = (enemyBoard, humanName) => {
+const aiAttack = (enemyBoard, humanName, neighborArray) => {
 
     let miss = false;
     let xCoord = 0;
     let yCoord = 0;
-    let neighbors = [];
     let attack;
     let targetTile;
 
@@ -163,15 +163,77 @@ const aiAttack = (enemyBoard, humanName) => {
         xCoord = Math.floor(Math.random()*10);
         yCoord = Math.floor(Math.random()*10);
 
-        if (neighbors.length !== 0) {
-            console.log("test");
-            // final trick is to make the AI smarter
+        if (neighborArray.length > 0) {
+            let attackCoords = neighborArray.pop();
+            attack = enemyBoard.receiveAttack(attackCoords.y, attackCoords.x);
+
+            if (attack === "You cannot strike the same spot twice") {
+                gsMessage.innerText = `Message: Try again. ${attack}.`;
+
+            } else if (attack.gameOver === true) {
+                gsMessage.innerText = `Message: Game Over! AI Wins! Refresh the browser to play again.`;
+                pScoreBoard1.innerText = `${humanName} has ${5 - Number(enemyBoard.getSunkenCount())} ships left.`;
+                targetTile = document.querySelector(`#m_a_${attackCoords.x}${attackCoords.y}`);
+                targetTile.style.backgroundColor = "red";
+                overlayDiv.classList.remove("hide");
+                return;
+
+            } else if (attack.status === "M") {
+                gsMessage.innerText = `Message: AI missed. Switching turns.`;
+                pScoreBoard1.innerText = `${humanName} has ${5 - Number(enemyBoard.getSunkenCount())} ships left.`;
+                targetTile = document.querySelector(`#m_a_${attackCoords.x}${attackCoords.y}`);
+                targetTile.style.backgroundColor = "cyan";
+                miss = true;
+
+            } else {
+                if (attack.sunk === true) {
+                    gsMessage.innerText = `Message: Ship sunk! AI may fire again.`;
+                    pScoreBoard1.innerText = `${humanName} has ${5 - Number(enemyBoard.getSunkenCount())} ships left.`;
+                    targetTile = document.querySelector(`#m_a_${attackCoords.x}${attackCoords.y}`);
+                    targetTile.style.backgroundColor = "red";
+
+                } else {
+                    gsMessage.innerText = `Message: Hit! AI may fire again.`;
+                    pScoreBoard1.innerText = `${humanName} has ${5 - Number(enemyBoard.getSunkenCount())} ships left.`;
+                    targetTile = document.querySelector(`#m_a_${attackCoords.x}${attackCoords.y}`);
+                    targetTile.style.backgroundColor = "red";
+
+                    if (attackCoords.direction === "north" || attackCoords.direction === "south") {
+                        neighborArray = neighborArray.filter((element) => {
+                            if (element.direction === "north" || element.direction === "south") {
+                                return true;
+                            }
+                        })
+                        if (attackCoords.direction === "north" && (attackCoords.y-1) >= 0) {
+                            neighborArray.push({direction: "north", y: attackCoords.y-1, x: attackCoords.x})
+
+                        } else if (attackCoords.direction === "south" && (attackCoords.y+1 <= 9)) {
+                            neighborArray.push({direction: "south", y: attackCoords.y+1, x: attackCoords.x})
+
+                        }
+
+                    } else if (attackCoords.direction === "east" || attackCoords.direction === "west") {
+                        neighborArray = neighborArray.filter((element) => {
+                            if (element.direction === "east" || element.direction === "west") {
+                                return true;
+                            }
+                        })
+                        if (attackCoords.direction === "east" && (attackCoords.x+1) <= 9) {
+                            neighborArray.push({direction: "east", y: attackCoords.y, x: attackCoords.x+1})
+
+                        } else if (attackCoords.direction === "west" && (attackCoords.x-1) >= 0) {
+                            neighborArray.push({direction: "west", y: attackCoords.y, x: attackCoords.x-1})
+
+                        }
+
+                    }
+                    
+                }
+
+            }
 
         } else {
             attack = enemyBoard.receiveAttack(yCoord, xCoord);
-            // console.log(`x: ${xCoord}, y: ${yCoord}`);
-            // console.log(`attack result: ${attack}`);
-            // console.log(enemyBoard.getBoard());
             if (attack === "You cannot strike the same spot twice") {
                 gsMessage.innerText = `Message: Try again. ${attack}.`;
 
@@ -196,13 +258,16 @@ const aiAttack = (enemyBoard, humanName) => {
                     pScoreBoard1.innerText = `${humanName} has ${5 - Number(enemyBoard.getSunkenCount())} ships left.`;
                     targetTile = document.querySelector(`#m_a_${xCoord}${yCoord}`);
                     targetTile.style.backgroundColor = "red";
-                    neighbors = [];
 
                 } else {
                     gsMessage.innerText = `Message: Hit! AI may fire again.`;
                     pScoreBoard1.innerText = `${humanName} has ${5 - Number(enemyBoard.getSunkenCount())} ships left.`;
                     targetTile = document.querySelector(`#m_a_${xCoord}${yCoord}`);
                     targetTile.style.backgroundColor = "red";
+                    if ((yCoord-1 >= 0) && enemyBoard.getBoard()[yCoord-1][xCoord] !== "M" && enemyBoard.getBoard()[yCoord-1][xCoord] !== "X") neighborArray.push({direction: "north", y: (yCoord-1), x: xCoord});
+                    if ((xCoord+1 <= 9) && enemyBoard.getBoard()[yCoord][xCoord+1] !== "M" && enemyBoard.getBoard()[yCoord][xCoord+1] !== "X") neighborArray.push({direction: "east", y: (yCoord), x: (xCoord+1)});
+                    if ((xCoord-1 >= 0) && enemyBoard.getBoard()[yCoord][xCoord-1] !== "M" && enemyBoard.getBoard()[yCoord][xCoord-1] !== "X") neighborArray.push({direction: "west", y: (yCoord), x: (xCoord-1)});
+                    if ((yCoord+1 <= 9) && enemyBoard.getBoard()[yCoord+1][xCoord] !== "M" && enemyBoard.getBoard()[yCoord+1][xCoord] !== "X") neighborArray.push({direction: "south", y: (yCoord+1), x: xCoord});
                     
                 }
 
@@ -1161,7 +1226,7 @@ pveSubmitButton.addEventListener("click", (e) => {
                     gsMessage.innerText = `Message: ${name1} missed. Switching turns.`;
                     pScoreBoard2.innerText = `${aiName} has ${5 - Number(aiBoard.getSunkenCount())} ships left.`;
                     e.target.style.backgroundColor = "cyan";
-                    aiAttack(pveBoard1, name1);
+                    aiAttack(pveBoard1, name1, neighbors);
     
                 } else {
                     if (attack.sunk === true) {
