@@ -16,7 +16,7 @@
     "test": "jest",
     "watch": "webpack --watch",
     "start": "webpack serve --open",
-    "build": "webpack"
+    "build": "npx webpack"
   },
   "author": "",
   "license": "ISC",
